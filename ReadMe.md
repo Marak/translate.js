@@ -15,13 +15,14 @@
         
         // note: the translator is actually English=>Spanish by default and calling in() and out() is optional
         
-        translate.text('yo quero tacos por favor');
+        translate.text('yo quero tacos por favor'); // outputs : i want tacos please
         
 ## languages
 
 ### fun facts
 
-translate.js uses the google api and requires an internet connection
+translate.js uses the google api and requires an internet connection<br/>
+if you want to actually hear the translated text as audio you could use <a href = "http://github.com/marak/say.js/">say.js</a><br/>
 
 ## Authors
 #### Andrew Lunny (alunny) & Marak Squires
