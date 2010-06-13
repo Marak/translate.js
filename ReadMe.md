@@ -22,8 +22,9 @@
 <table>
   <tr>
     <td>af</td><td>Afrikaans</td>
+  </tr>
+  <tr>
     <td>sq</td><td>Albanian</td>
-
   </tr>
 </table>
 
