@@ -12,10 +12,6 @@ var translates = exports;
 var input = languages['English'];
 var output = languages['Spanish'];
 
-var s = languages;
-
-//sys.puts(JSON.stringify(s));
-
 // http client for accessing google api
 var googleTranslate = http.createClient(80, 'ajax.googleapis.com');
 
@@ -40,11 +36,9 @@ exports.text = function (text, callback) {
     
   req.addListener('response', function (response) {
     var responseBody = "";
-    
     response.addListener('data', function (chunk) {
       responseBody += chunk;
     });
-    
     response.addListener('end', function () {
       var bodyObj = JSON.parse(responseBody);
       if (bodyObj.responseStatus === 200) {
@@ -54,6 +48,5 @@ exports.text = function (text, callback) {
       }
     });
   });
-  
   req.end();
 }

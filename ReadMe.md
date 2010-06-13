@@ -1,5 +1,7 @@
 # translate.js - translates text to different language, simple as cake
 
+<img src = "http://i.imgur.com/GJhm2.png" border = "0"/>
+
 <img src = "http://dustinkirkland.files.wordpress.com/2009/08/babelfish1981.jpg" border = "0"/>
 
 # usage
@@ -26,4 +28,4 @@ translate.js uses the google api and requires an internet connection<br/>
 if you want to actually hear the translated text as audio you could use <a href = "http://github.com/marak/say.js/">say.js</a><br/>
 
 ## Authors
-#### Andrew Lunny (alunny) & Marak Squires
+#### Andrew Lunny (alunny), Marak Squires, Google
