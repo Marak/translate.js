@@ -8,11 +8,11 @@
 
         var translate = require('./translate');
         
-        // set the input language
-        translate.input('English'); //
-        
-        // set the output language
-        translate.output('Spanish');
+        // set the input language 
+        translate.input('Spanish');
+
+        // set the output language 
+        translate.output('English');
         
         // note: if you don't specify an input or output language, translate.js will attempt to autodetect your input and set your output to English
         translate.text('yo quero tacos por favor', function(text){
