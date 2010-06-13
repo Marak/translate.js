@@ -18,13 +18,12 @@
         
 ## languages
 
-
 <table>
   <tr>
-    <td>af</td><td>Afrikaans</td>
+    <td><strong>af</strong></td><td>Afrikaans</td>
   </tr>
   <tr>
-    <td>sq</td><td>Albanian</td>
+    <td><strong>sq</strong></td><td>Albanian</td>
   </tr>
 </table>
 
