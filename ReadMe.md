@@ -15,8 +15,9 @@
         translate.output('Spanish');
         
         // note: if you don't specify an input or output language, translate.js will attempt to autodetect your input and set your output to English
-        
-        translate.text('yo quero tacos por favor'); // outputs : i want tacos please
+        translate.text('yo quero tacos por favor', function(text){
+          sys.puts(text); // outputs : i want tacos please
+        }); 
         
 ## languages
 
