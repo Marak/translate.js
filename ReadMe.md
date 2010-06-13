@@ -1,4 +1,4 @@
-# translate.js - translates text to different language, simple as cake
+# translate.js - translates text to different languages, simple as cake
 
 <img src = "http://i.imgur.com/GJhm2.png" border = "0"/>
 

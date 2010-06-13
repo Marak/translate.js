@@ -1,5 +1,5 @@
 var sys = require('sys');
-var translate = require('./colors'); // colors are fun!
+var colors = require('./colors'); // colors are fun!
 var translate = require('./translate');
 
 translate.input('English'); // you could omit this line, English=>Spanish is the default
