@@ -1,7 +1,6 @@
 // Andrew Lunny and Marak Squires
 // Mit yo, copy paste us some credit
 var sys = require('sys')
-  , fs = require('fs')
   , http = require('http');
   
 var languages = require('./languages').getLangs();
