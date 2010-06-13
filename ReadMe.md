@@ -19,9 +19,13 @@
 ## languages
 
 
+<table>
+  <tr>
+    <td>af</td><td>Afrikaans</td>
+    <td>sq</td><td>Albanian</td>
 
-<strong>af</strong>  Afrikaans <br/>
-<strong>sq</strong>   Albanian <br/>
+  </tr>
+</table>
 
 ### fun facts
 
