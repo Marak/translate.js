@@ -20,8 +20,8 @@
 
 
 
-<strong>af</strong>  Afrikaans
-<strong>sq</strong>   Albanian
+<strong>af</strong>  Afrikaans <br/>
+<strong>sq</strong>   Albanian <br/>
 
 ### fun facts
 
