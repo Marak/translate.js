@@ -2,11 +2,8 @@
 // Mit yo, copy paste us some credit
 var sys = require('sys')
   , fs = require('fs')
-  , http = require('http')
-  , exec = require('child_process').exec
-  , spawn = require('child_process').spawn
-  , child;
-
+  , http = require('http');
+  
 var languages = require('./languages').getLangs();
 var translates = exports;
 
