@@ -28,4 +28,4 @@ translate.js uses the google api and requires an internet connection<br/>
 if you want to actually hear the translated text as audio you could use <a href = "http://github.com/marak/say.js/">say.js</a><br/>
 
 ## Authors
-#### Andrew Lunny (alunny), Marak Squires, Google
+#### Andrew Lunny (alunny), Marak Squires, Google 
