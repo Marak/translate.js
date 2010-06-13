@@ -21,7 +21,6 @@
 
 
 <strong>af</strong>  Afrikaans
-
 <strong>sq</strong>   Albanian
 
 ### fun facts
