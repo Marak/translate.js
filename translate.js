@@ -5,20 +5,33 @@ var sys = require('sys')
   , spawn = require('child_process').spawn
   , child;
 
-var say = exports;
+var languages = require('./languages').getLangs();
+var translates = exports;
+
+// set the default input and output languages
+var input = languages['English'];
+var output = languages['Spanish'];
+
+var s = languages;
+
+//sys.puts(JSON.stringify(s));
 
 // http client for accessing google api
 var googleTranslate = http.createClient(80, 'ajax.googleapis.com');
 
 // simple fn to get the path given text to translate
-var getEnglishTranslatePath = function (text) {
+var getEnglishTranslatePath = function (text, lang) {
   return ['/ajax/services/language/translate?v=1.0&q='
-            ,encodeURIComponent(text)
-            ,'&langpair=%7Cen'].join("");
+            ,encodeURIComponent(text, lang)
+            ,'&langpair=' + input + '|' + output].join("");
 }
 
-exports.input = function(){};
-exports.output = function(){};
+exports.input = function(language){
+  input = languages[language];
+};
+exports.output = function(language){
+  output = languages[language];
+};
 
 // translate the text
 exports.text = function (text, callback) {

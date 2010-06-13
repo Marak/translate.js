@@ -2,23 +2,20 @@ var sys = require('sys');
 var translate = require('./translate');
     
 // note: the translator is actually English=>Spanish by default
+translate.text('I want tacos please.', function(text){
 
-translate.text('yo quero tacos por favor', function(text){
+  sys.puts('I want tacos please. => ' + text); // outputs : i want tacos please
+  
+  // set the input language to English
+  translate.input('Spanish');
 
-  sys.puts(text); // outputs : i want tacos please
+  // set the output language Spanish
+  translate.output('English');
 
-  // set the input language
-  translate.input('English');
-
-  // set the output language
-  translate.output('Spanish');
-
-  translate.text('I want tacos please.', function(text){
-
-    sys.puts(text); // outputs : i want tacos please
-
+  translate.text(text, function(text2){
+    sys.puts(text + ' => ' + text2);
+    sys.puts('English To Spanish taco request has been normalized. ^_^');
   }); 
-
 
 }); 
 
