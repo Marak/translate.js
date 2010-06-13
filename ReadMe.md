@@ -1,8 +1,7 @@
 # translate.js - translates text to different languages, simple as cake
 
-<img src = "http://i.imgur.com/GJhm2.png" border = "0"/>
+<img src = "http://i.imgur.com/0XzuZ.png" border = "0"/>
 
-<img src = "http://dustinkirkland.files.wordpress.com/2009/08/babelfish1981.jpg" border = "0"/>
 
 # usage
 
