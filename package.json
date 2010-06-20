@@ -1,0 +1,14 @@
+{
+    "name": "translate",
+    "description": "translate text from one language to another on node.js and the browser. 30+ languages supported, simple as cake.",
+    "version": "0.1.0",
+    "author": "Marak Squires",
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/Marak/translate.js.git" 
+    },
+    "engine": [
+        "node >=0.1.90" 
+    ],
+    "main": "translate" 
+}
