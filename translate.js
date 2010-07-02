@@ -18,13 +18,20 @@ if(typeof exports === 'undefined'){
 
   var translate = {
     text: function( lang, text, callback) {
-       $.ajax({
-         url: 'http://ajax.googleapis.com' + getEnglishTranslatePath(lang, text) + '&callback=?',
-         dataType: 'json',
-         success: function(rsp){
-           callback(rsp.responseData.translatedText);
-         }
-       });
+      
+      // this is not a good curry recipe. needs moar spice
+      if(typeof lang !== 'object'){
+        callback = text;
+        text = lang;
+      }
+      
+      $.ajax({
+        url: 'http://ajax.googleapis.com' + getEnglishTranslatePath(lang, text) + '&callback=?',
+        dataType: 'json',
+        success: function(rsp){
+          callback(rsp.responseData.translatedText);
+        }
+      });
     }
   };
 
