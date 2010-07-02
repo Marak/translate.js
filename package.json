@@ -1,7 +1,7 @@
 {
     "name": "translate",
     "description": "translate text from one language to another on node.js and the browser. 30+ languages supported, simple as cake.",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "author": "Marak Squires",
     "repository": {
         "type": "git",
