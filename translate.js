@@ -16,7 +16,17 @@ var getEnglishTranslatePath = function (lang, text) {
 // stupid if else statement, i felt like actually making his library dual-sided instead of bashing my head against gemini.js 
 if(typeof exports === 'undefined'){
 
-  
+  var translate = {
+    text: function( lang, text, callback) {
+       $.ajax({
+         url: 'http://ajax.googleapis.com' + getEnglishTranslatePath(lang, text) + '&callback=?',
+         dataType: 'json',
+         success: function(rsp){
+           callback(rsp.responseData.translatedText);
+         }
+       });
+    }
+  };
 
   
 }
