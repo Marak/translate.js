@@ -7,9 +7,11 @@
 
 ### node.js - 
           var sys = require('sys');
-          var colors = require('./colors'); // colors are fun!
-          var translate = require('./translate');
+          var colors = require('./vendor/colors'); // colors are fun!
+          var translate = require('./lib/translate');
 
+          // TODO: make this demo automatically iterate through all langauges as a test instead of manually nesting only 3
+    
           // note: the translator is  English=>Spanish by default
           translate.text('I want tacos please.', function(text){
 
@@ -25,8 +27,7 @@
                  sys.puts('English'.red+'=>'+'Spanish'.yellow+'=>'+'Japanese'.blue+'=>'+'English'.red  +'\ntaco request has been normalized. ^_^'.green);
               });
             }); 
-          }); 
-
+          });
 
 ### browser - 
 
