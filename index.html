@@ -138,7 +138,8 @@ THE SOFTWARE.
       /**** END UI BIND EVENTS ****/
 
       // little bit of a onReady hack. i'll fix the API a bit so this can be done better
-      $(document).trigger('##CHANGE_LANGUAGE##', {"fontName":'Doh'});
+      //$(document).trigger('##CHANGE_LANGUAGE##', {"fontName":'Doh'});
+      $('#run').attr('disabled','');
       $('#langInput').val('English');
       $('#langOutput').val('Spanish');
 
