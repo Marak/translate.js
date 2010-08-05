@@ -79,7 +79,9 @@ THE SOFTWARE.
 	<script type="text/javascript" src="./vendor/jquery.js"></script>
 
   <script type="text/javascript">
-    var languages;
+    var languages,
+    translating = false,
+    is_dirty = false;
     
     $(document).ready(function(){
       
@@ -98,6 +100,15 @@ THE SOFTWARE.
     
         $(document).bind('##TRANSLATE_TEXT##', function(e){
 
+          // we are currently "translating", block the request...but set UI to "dirty"
+          if(translating){
+            is_dirty = true;
+            return false;
+          }
+          
+          // set "translating" state to true, so we don't spam AJAX events
+          translating = true;
+          
           $('#run').attr('disabled','disabled');
           $('#run').val('translating...');     
           var input = $('#langInput').val(), output = $('#langOutput').val();
@@ -106,6 +117,16 @@ THE SOFTWARE.
             $('#run').attr('disabled','');
             $('#run').val('<== translate ==>');
       		  $('#output').val( result );
+      		  
+      		  // set "translating" state to false, so we can fire an AJAX event
+      		  translating = false;
+      		  
+      		  // since the UI "is_dirty", we need to translate again!
+      		  if(is_dirty){
+      		    is_dirty = false;
+      		    //$(document).trigger('##TRANSLATE_TEXT##');
+      		  }
+      		  
           });
         });
 
@@ -115,7 +136,7 @@ THE SOFTWARE.
 
         // select box change
         $('#langSelector').change(function(){
-          $(document).trigger('##CHANGE_LANGUAGE##', {"fontName":$(this).val()})
+          $(document).trigger('##CHANGE_LANGUAGE##');
         });
       
         /*
@@ -124,13 +145,18 @@ THE SOFTWARE.
           // we could setup some blocking / keypress intent here for live-like updates
           $(document).trigger('##CHANGE_LANGUAGE##', {"fontName":$(this).val()})
         });
-
+        */
+        
         // keyup on textarea
         $('#theCode').keyup(function(e){
-          // we could setup some blocking / keypress intent here for live-like updates
-          $(document).trigger('##TRANSLATE_TEXT##');
+          
+          // add small delay here to create "intent"
+          setTimeout(function(){
+            $(document).trigger('##TRANSLATE_TEXT##')
+          }, 2000);
+          
         });
-        */      
+              
         $('#run').click(function(e){
           $(document).trigger('##TRANSLATE_TEXT##');
         });
