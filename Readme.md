@@ -1,33 +1,32 @@
 # translate.js - translates text to different languages, simple as cake
+<img src = "https://github.com/Marak/translate.js/raw/master/logo.png" border = "0"/>
 
-<img src = "http://imgur.com/EHfN2.png" border = "0"/>
+## v0.50
 
-
-# usage
+# USAGE
 
 ### node.js - 
-          var sys = require('sys');
-          var colors = require('./vendor/colors'); // colors are fun!
-          var translate = require('./lib/translate');
 
-          // TODO: make this demo automatically iterate through all langauges as a test instead of manually nesting only 3
-    
-          // note: the translator is  English=>Spanish by default
-          translate.text('I want tacos please.', function(text){
+        var sys = require('sys');
+        var colors = require('colors'); // colors are fun!
+        var translate = require('./lib/translate');
 
-            sys.puts('I want tacos please.'.red + ' => '.cyan + text.yellow);
-            var input = 'Spanish', output = "Japanese";
-            translate.text({input:input,output:output}, text, function(text2){
+        // note: the translator is  English=>Spanish by default
+        translate.text('I want tacos please.', function(err, text){
 
-              var input = 'Japanese', output = "English";
-              sys.puts(text.yellow + ' => '.cyan + text2.blue);
-              translate.text({input:input,output:output}, text, function(text3){
+          sys.puts('I want tacos please.'.red + ' => '.cyan + text.yellow);
+          var input = 'Spanish', output = "Japanese";
+          translate.text({input:input,output:output}, text, function(err, text2){
 
-                 sys.puts(text2.blue + ' => '.cyan + text3.red);
-                 sys.puts('English'.red+'=>'+'Spanish'.yellow+'=>'+'Japanese'.blue+'=>'+'English'.red  +'\ntaco request has been normalized. ^_^'.green);
-              });
-            }); 
-          });
+            var input = 'Japanese', output = "English";
+            sys.puts(text.yellow + ' => '.cyan + text2.blue);
+            translate.text({input:input,output:output}, text, function(err, text3){
+
+               sys.puts(text2.blue + ' => '.cyan + text3.red);
+               sys.puts('English'.red+'=>'+'Spanish'.yellow+'=>'+'Japanese'.blue+'=>'+'English'.red  +'\ntaco request has been normalized. ^_^'.green);
+            });
+          }); 
+        });
 
 ### browser - 
 
