@@ -1,7 +1,7 @@
 # translate.js - translates text to different languages, simple as cake
 <img src = "https://github.com/Marak/translate.js/raw/master/logo.png" border = "0"/>
 
-## v0.50
+## v0.6.0
 
 # USAGE
 
