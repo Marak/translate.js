@@ -28,21 +28,30 @@ var sys = require('sys');
 var colors = require('colors'); // colors are fun!
 var translate = require('../lib/translate');
 
-// TODO: make this demo automatically iterate through all langauges as a test instead of manually nesting only 3
-    
-// note: the translator is  English=>Spanish by default
-translate.text('I want tacos please.', function(err, text){
+var testString = 'I want tacos please';
 
-  sys.puts('I want tacos please.'.red + ' => '.cyan + text.yellow);
-  var input = 'Spanish', output = "Japanese";
-  translate.text({input:input,output:output}, text, function(err, text2){
+var input = '', output = "Spanish";
+translate.text({input:input,output:output}, testString, function(err, text, lang){
 
-    var input = 'Japanese', output = "English";
-    sys.puts(text.yellow + ' => '.cyan + text2.blue);
-    translate.text({input:input,output:output}, text, function(err, text3){
+	if(lang == null){
+		//you might want to pass in the input here and set lang to input, also lang is in short code format
+		lang = 'not automatically detected';
+	}
+	sys.puts('the input was, ' + '    '.inverse + lang.inverse + '    '.inverse);
+	
+	sys.puts(testString.red + ' => '.cyan + text.yellow);
 
-       sys.puts(text2.blue + ' => '.cyan + text3.red);
-       sys.puts('English'.red+'=>'+'Spanish'.yellow+'=>'+'Japanese'.blue+'=>'+'English'.red  +'\ntaco request has been normalized. ^_^'.green);
-    });
-  }); 
-}); 
+	var input = '', output2 = "Japanese";
+  	translate.text({input:input,output:output2}, text, function(err, text2, lang2){
+	
+		sys.puts(text.yellow + ' => '.cyan + text2.blue);
+	
+    	var input = '', output3 = "English";
+    	translate.text({input:input,output:output3}, text, function(err, text3, lang3){
+
+			sys.puts(text2.blue + ' => '.cyan + text3.red);
+
+       		sys.puts(lang.red + '=>' + output.yellow + '=>' + output2.blue + '=>' + output3.red + '\ntaco request has been normalized. ^_^'.green);
+		});
+	}); 
+});
