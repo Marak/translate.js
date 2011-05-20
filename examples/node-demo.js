@@ -33,10 +33,6 @@ var testString = 'I want tacos please';
 var input = '', output = "Spanish";
 translate.text({input:input,output:output}, testString, function(err, text, lang){
 
-	if(lang == null){
-		//you might want to pass in the input here and set lang to input, also lang is in short code format
-		lang = 'not automatically detected';
-	}
 	sys.puts('the input was, ' + '    '.inverse + lang.inverse + '    '.inverse);
 	
 	sys.puts(testString.red + ' => '.cyan + text.yellow);
