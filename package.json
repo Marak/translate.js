@@ -7,10 +7,19 @@
     "type": "git",
     "url": "http://github.com/Marak/translate.js.git"
   },
+  "scripts": {
+    "start": "npm run browser | npm run watch",
+    "browser": "http-server",
+    "dev": "webpack",
+    "test": "webpack -p && jest --coverage --forceExit",
+    "watch": "nodemon --exec \"npm test\" --watch src --watch test --watch webpack.config.js --watch package.json",
+    "gzip": "gzip -c translate.min.js | wc -c # Only for Unix"
+  },
   "engine": [
     "node >=4.0.0"
   ],
   "dependencies": {
+    "memory-cache": "^0.2.0",
     "node-fetch": "^1.7.3"
   },
   "devDependencies": {

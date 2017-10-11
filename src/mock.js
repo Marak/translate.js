@@ -14,8 +14,8 @@ if (typeof fetch === 'undefined') {
 
 // This is a small hack only not to pay for translating keywords while testing
 // NOTE: this probably does NOT conform with Google ToS, so don't activate it for the public
-// const url = ({ from, to, text }) => `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`;
-const url = () => { throw new Error('In development'); };
+const url = ({ from, to, text }) => `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`;
+// const url = () => { throw new Error('In development'); };
 
 const extract = body => {
   // Just an assurance that it will break for sure

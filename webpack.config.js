@@ -1,5 +1,8 @@
 const fs = require('fs');
 
+// Bundle these packages in the translate.min.js file
+const allow = [/regenerator-runtime/, /memory-cache/];
+
 // ./webpack.config.js
 module.exports = {
   entry: ['regenerator-runtime', './src/index.js'],
@@ -17,9 +20,11 @@ module.exports = {
     }]
   },
   externals: function(context, request, callback) {
-    if (request.match(/babel/) || request.match(/regenerator-runtime/)) {
+
+    if (allow.filter(one => one.test(request)).length) {
       return callback();
     }
+
     // Absolute & Relative paths are not externals
     if (request.match(/^(\.{0,2})\//)) {
       return callback();

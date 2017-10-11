@@ -4,15 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>Translate example</title>
 </head>
 <body>
+
+  <p class="greeting"></p>
 
   <script src="translate.min.js"></script>
   <script>
     (async () => {
       const res = await translate('Hello world', { from: 'en', to: 'es' });
-      console.log(res);
+      // const res = await translate('Hello world', { from: 'en', to: 'es', engine: 'yandex' });
+      document.querySelector('.greeting').innerText = `Hello world => ${res}`;
     })();
   </script>
 </body>

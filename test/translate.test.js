@@ -1,8 +1,15 @@
-let translate;
+const translate = require('../translate.min.js');
+const fs = require('fs');
+const env = fs.readFileSync('./.env', 'utf-8').split('\n').forEach(one => {
+  const [key, ...value] = one.split('=');
+  process.env[key] = value.join('=');
+});
+
+translate.engines.google.url = process.env.GOOGLE_URL || env.GOOGLE_URL;
+translate.engines.yandex.url = process.env.YANDEX_URL || env.YANDEX_URL;
 
 describe('Main', () => {
   it('loads', () => {
-    translate = require('../translate.min.js');
     expect(translate).toBeDefined();
   });
 
@@ -35,45 +42,45 @@ describe('Main', () => {
 
 
 
-let parse;
+let language;
 describe('language parsing', () => {
   it('loads', () => {
-    parse = translate.parse;
-    expect(parse).toBeDefined();
+    language = translate.language;
+    expect(language).toBeDefined();
   });
 
   it('works with a good language name', () => {
-    expect(parse('Spanish')).toBe('es');
+    expect(language('Spanish')).toBe('es');
   });
 
   it('works with the plain ISO', () => {
-    expect(parse('es')).toBe('es');
-    expect(parse('ja')).toBe('ja');
-    expect(parse('en')).toBe('en');
+    expect(language('es')).toBe('es');
+    expect(language('ja')).toBe('ja');
+    expect(language('en')).toBe('en');
   });
 
   it('works with the alternative ISO 639-2', () => {
-    expect(parse('spa')).toBe('es');
-    expect(parse('jpn')).toBe('ja');
-    expect(parse('eng')).toBe('en');
+    expect(language('spa')).toBe('es');
+    expect(language('jpn')).toBe('ja');
+    expect(language('eng')).toBe('en');
   });
 
   it('works with diferent casing', () => {
-    expect(parse('spanish')).toBe('es');
-    expect(parse('SpANisH')).toBe('es');
-    expect(parse('SPANISH')).toBe('es');
+    expect(language('spanish')).toBe('es');
+    expect(language('SpANisH')).toBe('es');
+    expect(language('SPANISH')).toBe('es');
   });
 
   it('throws with an invalid language name type', () => {
-    expect(() => parse(20)).toThrow();
+    expect(() => language(20)).toThrow();
   });
 
   it('throws with a language name too long', () => {
-    expect(() => parse('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')).toThrow();
+    expect(() => language('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')).toThrow();
   });
 
   it('throws with a wrong language name', () => {
-    expect(() => parse('asdfghjddas')).toThrow();
+    expect(() => language('asdfghjddas')).toThrow();
   });
 
   it('works with fuzzy strings', () => {
@@ -82,11 +89,52 @@ describe('language parsing', () => {
 });
 
 
+describe('cache', () => {
+  const stop = time => new Promise((resolve, reject) => {
+    setTimeout(resolve, time);
+  });
 
-const fs = require('fs');
+  it('caches', async () => {
+    const before = new Date();
+    await translate('Is this cached?', 'es');
+    const mid = new Date();
+    await translate('Is this cached?', 'es');
+    const after = new Date();
+    expect(mid - before).toBeLessThan(10000);
+    expect(mid - before).toBeGreaterThan(100);
+    expect(after - mid).toBeLessThan(10);
+    expect(after - mid).toBeGreaterThanOrEqual(0);
+  });
+
+  it('removes cache after the time is out', async () => {
+    const before = new Date();
+    await translate('Is this also cached?', { to: 'es', cache: 1000 });
+    const mid = new Date();
+    await stop(1100);
+    await translate('Is this also cached?', { to: 'es' });
+    const after = new Date();
+    expect(mid - before).toBeLessThan(10000);
+    expect(mid - before).toBeGreaterThan(100);
+    expect(after - mid).toBeLessThan(10000);
+    expect(after - mid).toBeGreaterThan(100);
+  });
+});
+
+
+
 describe('File size', () => {
   it('is smaller than 20kb (uncompressed)', () => {
     const details = fs.statSync(process.cwd() + '/translate.min.js');
     expect(details.size).toBeLessThan(25000);
+  });
+});
+
+
+
+describe('Engines', () => {
+  it('Yandex', async () => {
+    const spanish = await translate('Hello from Yandex', { to: 'es', engine: 'yandex' });
+    console.log('Yandex res:', spanish);
+    expect(spanish).toMatch(/Hola de Yandex/i);
   });
 });

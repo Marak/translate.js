@@ -1,9 +1,10 @@
 # Translate
 
-Translate text to different languages on node.js and the browser. Flexible module and powerful back-end using Google Translate:
+Convert text to different languages on node.js and the browser. Flexible package and powerful back-end using Google Translate:
 
 ```js
-translate('Hello world', { to: 'es' }).then(text => {
+// 'es' can be a language string or an object like { to: 'es' }
+translate('Hello world', 'es').then(text => {
   console.log(text);  // Hola mundo
 });
 ```
@@ -12,7 +13,7 @@ Example with an async workflow:
 
 ```js
 const whatever = async () => {
-  const text = await translate('Hello world', { to: 'es' });
+  const text = await translate('Hello world', 'es');
   console.log(text);  // Hola mundo
 };
 ```
@@ -21,7 +22,7 @@ const whatever = async () => {
 
 ## Getting started
 
-This package can be used either in Node.js and on the browser. For the browser we are using `fetch`, so you might want to [polyfill it](https://polyfill.io/v2/docs/) depending on [the browsers you support](https://caniuse.com/#feat=fetch).
+This package can be used in Node.js and on the browser. For the browser we are using `fetch`, so you might want to [polyfill it](https://polyfill.io/v2/docs/) depending on [the browsers you support](https://caniuse.com/#feat=fetch).
 
 To use it in `node.js` first install it:
 
@@ -35,7 +36,7 @@ Then import it to use it:
 const translate = require('translate');
 ```
 
-To use it in the browser you download the main `translate.min.js` file and include it:
+To use it in the browser download the main `translate.min.js` file and include it:
 
 ```html
 <script src="translate.min.js"></script>
@@ -47,7 +48,7 @@ Or use the awesome [unpkg](https://unpkg.com/) **CDN**:
 <script src="https://unpkg.com/translate@1"></script>
 ```
 
-After including it with either of those methods, the usage is the same for both of them afterwards.
+After including translate the usage is similar for both Node.js and the browser.
 
 
 
@@ -55,13 +56,14 @@ After including it with either of those methods, the usage is the same for both 
 
 The first parameter is the **string** that you want to translate. Right now only a single string of text is accepted.
 
-The second parameter is the options. It accepts either a `String` of the language to translate **to** or a simple `Object`.
-
-The full options are:
+The second parameter is the options. It accepts either a `String` of the language to translate **to** or a simple `Object` with these options:
 
 - **`to`**: the string of the language to translate to. It can be in any of the two ISO 639 (1 or 2) or the full name in English like `Spanish`. Defaults to **en**.
 - **`from`**: the string of the language to translate to. It can be in any of the two ISO 639 (1 or 2) or the full name in English like `Spanish`. Also defaults to **en**.
-- More options to come like API key, translation files, cache, etc.
+- **`cache`**: a `Number` with the milliseconds that each translation should be cached. Leave it undefined to cache it indefinitely (until a server/browser restart).
+- **`engine`**: a `String` containing the name of the engine to use for translation. Right now it defaults to `google` and this is the only available option.
+- **`keys`**: 
+- More options to come like API key, translation files, etc.
 
 Examples:
 

@@ -1,26 +1,56 @@
 // translate.js
-// Include all/any other dependencies
-// import regeneratorRuntime from 'regenerator-runtime';
-
-// PROVISIONAL => update to the real API with the API KEY
-import mock from './mock';
+// Translate text into different languages;
 
 // Load a language parser to allow for more flexibility in the language choice
-import parse from './parse';
+import language from './language';
 
-const translate = (text, options = {}) => {
+// Load the default engines for translation
+import engines from './engines';
 
-  if (typeof options === 'string') options = { to: options };
-  options.from = parse(options.from || translate.from || 'en');
-  options.to = parse(options.to || translate.to || 'en');
+// Cache the different translations to avoid resending requests
+import cache from 'memory-cache';
 
-  return mock(text, options);
+// Main function
+const translate = (text, opts = {}) => {
+
+  // Load all of the appropriate options (verbose but fast)
+  // Note: not all of those *should* be documented since some are internal only
+  if (typeof opts === 'string') opts = { to: opts };
+  opts.text = text;
+  opts.from = language(opts.from || translate.from);
+  opts.to = language(opts.to || translate.to);
+  opts.cache = opts.cache || translate.cache;
+  opts.id = opts.id || `${opts.from}:${opts.to}:${opts.text}`;
+  opts.engines = opts.engines || {};
+  opts.engine = opts.engine || translate.engine;
+
+  // TODO: validation for few of those
+
+  // Use the desired engine
+  const engine = opts.engines[opts.engine] || translate.engines[opts.engine];
+
+  // If it is cached return ASAP
+  const cached = cache.get(opts.id);
+  if (cached) return cached;
+
+  // Will load only for Node.js and use the native function on the browser
+  if (typeof fetch === 'undefined') {
+    global.fetch = require('node-fetch');
+  }
+
+  return fetch(...engine.fetch(opts))
+    .then(res => res.json())
+    .then(engine.parse)
+    .then(translated => cache.put(opts.id, translated, opts.cache));
 };
 
 // Defaults
 translate.from = 'en';
 translate.to = 'en';
-translate.parse = parse;
+translate.cache;
+translate.language = language;
+translate.engines = engines;
+translate.engine = 'google';
 
 // Small hack needed for Webpack/Babel: https://github.com/webpack/webpack/issues/706
 module.exports = translate;
