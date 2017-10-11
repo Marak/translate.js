@@ -27,7 +27,7 @@ const translate = (text, opts = {}) => {
   opts.engines = opts.engines || {};
   opts.engine = opts.engine || translate.engine;
   opts.id = opts.id || `${opts.from}:${opts.to}:${opts.engine}:${opts.text}`;
-  opts.keys = opts.keys || {};
+  opts.keys = opts.keys || translate.keys || {};
   for (let name in translate.keys) {
     opts.keys[name] = opts.keys[name];
   }
@@ -61,8 +61,9 @@ const translate = (text, opts = {}) => {
   //   throw new Error(`The engine "${opts.engine}" needs a key, please provide it`);
   // }
 
-  return fetch(...engine.fetch(opts))
-    .then(res => res.json())
+  const fetchOpts = engine.fetch(opts);
+  // console.log(opts.keys, fetchOpts);
+  return fetch(...fetchOpts)
     .then(engine.parse)
     .then(translated => cache.put(opts.id, translated, opts.cache));
 };

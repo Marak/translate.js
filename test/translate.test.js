@@ -8,7 +8,8 @@ const env = fs.readFileSync('./.env', 'utf-8').split('\n').forEach(one => {
 translate.engines.google.fetch = ({ from, to, text }) => [
   `${process.env.GOOGLE_URL}&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`
 ];
-translate.engines.yandex.url = process.env.YANDEX_URL;
+translate.keys.yandex = process.env.YANDEX_KEY;
+
 
 describe('Main', () => {
   it('loads', () => {
