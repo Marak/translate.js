@@ -4,10 +4,11 @@
 
 const google = {
   url: '',
-  fetch: ({ from, to, text }) => {
-    return  [
-    `${google.url}&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`
-  ]},
+  needkey: true,
+  fetch: ({ from, to, key, text }) => [
+    `https://translation.googleapis.com/language/translate/v2?key=${key}&source=${from}&target=${to}&q=${encodeURIComponent(text)}`,
+    { method: 'POST' }
+  ],
   parse: body => {
     while (Array.isArray(body) && body.length) {
       body = body[0];
@@ -19,7 +20,8 @@ const google = {
 
 const yandex = {
   url: '',
-  fetch: ({ from, to, text }) => [
+  needkey: true,
+  fetch: ({ from, to, key, text }) => [
     `${yandex.url}&srv=tr-text&lang=${from}-${to}&reason=auto&exp=1`,
     {
       method: 'POST', body: `text=${encodeURIComponent(text)}&options=4`,
@@ -31,5 +33,6 @@ const yandex = {
     return body.text[0];
   }
 };
+
 
 export default { google, yandex };

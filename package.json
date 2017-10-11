@@ -11,7 +11,7 @@
     "start": "npm run browser | npm run watch",
     "browser": "http-server",
     "dev": "webpack",
-    "test": "webpack -p && jest --coverage --forceExit",
+    "test": "webpack -p && jest --forceExit",
     "watch": "nodemon --exec \"npm test\" --watch src --watch test --watch webpack.config.js --watch package.json",
     "gzip": "gzip -c translate.min.js | wc -c # Only for Unix"
   },

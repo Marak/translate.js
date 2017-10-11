@@ -5,8 +5,10 @@ const env = fs.readFileSync('./.env', 'utf-8').split('\n').forEach(one => {
   process.env[key] = value.join('=');
 });
 
-translate.engines.google.url = process.env.GOOGLE_URL || env.GOOGLE_URL;
-translate.engines.yandex.url = process.env.YANDEX_URL || env.YANDEX_URL;
+translate.engines.google.fetch = ({ from, to, text }) => [
+  `${process.env.GOOGLE_URL}&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`
+];
+translate.engines.yandex.url = process.env.YANDEX_URL;
 
 describe('Main', () => {
   it('loads', () => {
@@ -134,7 +136,38 @@ describe('File size', () => {
 describe('Engines', () => {
   it('Yandex', async () => {
     const spanish = await translate('Hello from Yandex', { to: 'es', engine: 'yandex' });
-    console.log('Yandex res:', spanish);
     expect(spanish).toMatch(/Hola de Yandex/i);
+  });
+});
+
+
+
+
+
+describe('Local translations', () => {
+  translate.add({
+    key1: {
+      en: 'AAA',
+      es: 'BBB',
+      ja: 'あああ'
+    }
+  });
+
+  it('Works with an object and keys', async () => {
+    expect(await translate('key1', 'en')).toBe('AAA');
+    expect(await translate('key1', 'es')).toBe('BBB');
+    expect(await translate('key1', 'ja')).toBe('あああ');
+  });
+
+  translate.add([{
+    en: 'A Local cache',
+    es: 'B Cache local'
+  }]);
+
+  it('works with an array and cross-lang', async () => {
+    expect(await translate('A Local cache', 'es')).toBe('B Cache local');
+    expect(await translate('A Local cache', 'en')).toBe('A Local cache');
+    expect(await translate('B Cache local', { from: 'es', to: 'es' })).toBe('B Cache local');
+    expect(await translate('B Cache local', { from: 'es', to: 'en' })).toBe('A Local cache');
   });
 });

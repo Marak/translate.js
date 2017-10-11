@@ -1,6 +1,6 @@
 # Translate
 
-Convert text to different languages on node.js and the browser. Flexible package and powerful back-end using Google Translate:
+Convert text to different languages on node.js and the browser. Flexible package and powerful back-end using Google (default), Bing or Yandex:
 
 ```js
 // 'es' can be a language string or an object like { to: 'es' }
@@ -13,7 +13,7 @@ Example with an async workflow:
 
 ```js
 const whatever = async () => {
-  const text = await translate('Hello world', 'es');
+  const text = await translate('こんにちは世界', { from: 'ja', to: 'es' });
   console.log(text);  // Hola mundo
 };
 ```
@@ -61,8 +61,8 @@ The second parameter is the options. It accepts either a `String` of the languag
 - **`to`**: the string of the language to translate to. It can be in any of the two ISO 639 (1 or 2) or the full name in English like `Spanish`. Defaults to **en**.
 - **`from`**: the string of the language to translate to. It can be in any of the two ISO 639 (1 or 2) or the full name in English like `Spanish`. Also defaults to **en**.
 - **`cache`**: a `Number` with the milliseconds that each translation should be cached. Leave it undefined to cache it indefinitely (until a server/browser restart).
-- **`engine`**: a `String` containing the name of the engine to use for translation. Right now it defaults to `google` and this is the only available option.
-- **`keys`**: 
+- **`engine`**: a `String` containing the name of the engine to use for translation. Right now it defaults to `google`. Read more [in the engine section](#engine).
+- **`key`**: the API Key for the engine of your choice. Read more [in the engine section](#engine).
 - More options to come like API key, translation files, etc.
 
 Examples:
@@ -77,10 +77,110 @@ const bar = await translate('Hello world', { to: 'es' });
 
 > On both `to` and `from` defaulting to `en`: while I _am_ Spanish and was quite tempted to set this as one of those, English is the main language of the Internet and the main secondary language for those who have a different native language. This is why most of the translations will happen either to or from English.
 
-You can also change the default `from` language for all of your codebase, like if your main language is different from English:
+
+## Default options
+
+You can change the default options for anything by calling the root library and the option name:
 
 ```js
 translate.from = 'es';
+```
+
+This can be applied to any of the options enumerated above.
+
+
+
+## Engines
+
+Several translating engines are available to translate your text:
+
+- **`google`**: ([demo](https://translate.google.com/) | [docs](https://cloud.google.com/translate/docs/)): Google Translate.
+- **`yandex`**: ([demo](https://translate.yandex.com/) | [docs](https://tech.yandex.com/translate/) | [API Key](https://translate.yandex.com/developers/keys)): Yandex Translate
+- **Microsoft Translate (Bing)**: not yet implemented.
+
+> To get the API Key you will be signing some contract with these services; it's your responsibility to follow these and we are not liable if you don't as explained in our MIT License.
+
+Once you get the API key and if you are only going to be using an engine (very likely), we recommend setting this globally for your whole project:
+
+```js
+// ... include translate
+
+translate.engine = 'google';
+translate.key = 'YOUR-KEY-HERE';
+
+// ... use translate()
+```
+
+To pass it per-translation, you can add it to your arguments:
+
+```js
+translate('Hello world', { to: 'en', engine: 'google', key: 'YOUR-KEY-HERE' });
+```
+
+
+
+## Local translations
+
+You can also specify manual translations with online translation as a fallback (or not). For this, we have to specify them with an object with this structure:
+
+```js
+// Load it manually:
+translate.add({
+  hello: {
+    en: 'Hello world',
+    es: 'Hola mundo'
+  },
+  bye: {
+    en: 'Bye world',
+    es: 'Adiós mundo'
+  }
+  // ....
+});
+
+// Then use then
+const spanish = await translate('hello', 'es');
+expect(spanish).toBe('Hola mundo');
+```
+
+If you have the translations stored into a JSON you can load those. Example with Node.js:
+
+```js
+// First load the file. A .json can be loaded just like this:
+const translations = require('./translations.json');
+
+// Load it into translate.js
+translate.add(translations);
+
+// Use it
+const spanish = await translate('hello', 'es');
+expect(spanish).toBe('Hola mundo');
+```
+
+You can also load translations as an array. For large translations with many languages this is memory inefficient (O(n*l^2), where n = number of texts and l = number of translations per string):
+
+```js
+translate.add([{
+  en: 'Hello world',
+  es: 'Hola mundo'
+}, {
+  en: 'Bye world',
+  es: 'Adiós mundo'
+}]);
+
+// Remember the 'from' defaults to 'en'
+const spanish = await translate('Hello world', 'es');
+expect(spanish).toBe('Hola mundo');
+
+// But it is also more flexible as it can match any language as the source:
+const english = await translate('Hola mundo', { from: 'es', to: 'en' });
+expect(english).toBe('Hello world');
+```
+
+If you want to make sure that you are only using offline translations, set the `engine` to `local`:
+
+```js
+translate.add(translations);
+translate.engine = 'local';
 ```
 
 
