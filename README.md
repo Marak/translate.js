@@ -52,7 +52,7 @@ After including translate the usage is similar for both Node.js and the browser.
 
 
 
-## Parameters
+## Options
 
 The first parameter is the **string** that you want to translate. Right now only a single string of text is accepted.
 
@@ -63,7 +63,6 @@ The second parameter is the options. It accepts either a `String` of the languag
 - **`cache`**: a `Number` with the milliseconds that each translation should be cached. Leave it undefined to cache it indefinitely (until a server/browser restart).
 - **`engine`**: a `String` containing the name of the engine to use for translation. Right now it defaults to `google`. Read more [in the engine section](#engine).
 - **`key`**: the API Key for the engine of your choice. Read more [in the engine section](#engine).
-- More options to come like API key, translation files, etc.
 
 Examples:
 
@@ -78,7 +77,7 @@ const bar = await translate('Hello world', { to: 'es' });
 > On both `to` and `from` defaulting to `en`: while I _am_ Spanish and was quite tempted to set this as one of those, English is the main language of the Internet and the main secondary language for those who have a different native language. This is why most of the translations will happen either to or from English.
 
 
-## Default options
+### Default options
 
 You can change the default options for anything by calling the root library and the option name:
 
@@ -111,6 +110,18 @@ translate.key = 'YOUR-KEY-HERE';
 // ... use translate()
 ```
 
+If you are in Node.js, this likely comes from an environment variable:
+
+```js
+// ... include translate
+
+translate.engine = 'google';
+translation.key = process.env.TRANSLATE_KEY;
+
+// ... use translate()
+```
+
+
 To pass it per-translation, you can add it to your arguments:
 
 ```js
@@ -121,7 +132,7 @@ translate('Hello world', { to: 'en', engine: 'google', key: 'YOUR-KEY-HERE' });
 
 ## Local translations
 
-You can also specify manual translations with online translation as a fallback (or not). For this, we have to specify them with an object with this structure:
+You can also specify manual translations with optional online translation as a fallback. For this, specify them with an object with this structure:
 
 ```js
 // Load it manually:
@@ -176,7 +187,7 @@ const english = await translate('Hola mundo', { from: 'es', to: 'en' });
 expect(english).toBe('Hello world');
 ```
 
-If you want to make sure that you are only using offline translations, set the `engine` to `local`:
+If you want to make sure that you are only using offline translations with no fallback, set the `engine` to `local`:
 
 ```js
 translate.add(translations);
@@ -187,9 +198,7 @@ translate.engine = 'local';
 
 ## Promises
 
-Working with Promises and specially with [async/await](https://ponyfoo.com/articles/understanding-javascript-async-await) is really great since it reduces [Callback Hell](http://callbackhell.com/) quite a bit.
-
-To see it in action, first you'll need an `async` function. Then put your `await` calls inside:
+Working with Promises and specially with [async/await](https://ponyfoo.com/articles/understanding-javascript-async-await) reduces [Callback Hell](http://callbackhell.com/). To see it in action, first you'll need an `async` function. Then put your `await` calls inside:
 
 ```js
 // Browser; jQuery for demonstration purposes
@@ -200,7 +209,7 @@ $('#translate').submit(async e => {
   alert(spanish);
 });
 
-// Node.js; serverjs.io style middleware for demonstration purposes
+// Node.js; serverjs.io example for demonstration purposes
 const route = async ctx => {
   const spanish = await translate(ctx.body, { to: 'es' });
   return send(spanish);
