@@ -1,6 +1,7 @@
 {
   "name": "translate",
   "description": "Translate text to different languages on node.js and the browser",
+  "main": "translate.min.js",
   "version": "1.0.0-alpha.1",
   "author": "Francisco Presencia",
   "repository": {
@@ -10,20 +11,20 @@
   "scripts": {
     "start": "npm run browser | npm run watch",
     "browser": "http-server",
-    "dev": "webpack",
-    "test": "webpack -p && jest --forceExit",
-    "watch": "nodemon --exec \"npm test\" --watch src --watch test --watch webpack.config.js --watch package.json",
+    "build": "rollup src/index.js -o translate.js --name translate --output.format umd && uglifyjs translate.js -o translate.min.js",
+    "test": "jest --coverage --collectCoverageFrom=src/**/*.js --forceExit",
+    "watch": "nodemon --exec \"npm run build && npm test\" --watch src --watch test --watch webpack.config.js --watch package.json",
     "gzip": "gzip -c translate.min.js | wc -c # Only for Unix"
   },
   "engine": [
     "node >=4.0.0"
   ],
   "dependencies": {
-    "memory-cache": "^0.2.0",
     "node-fetch": "^1.7.3"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
+    "babel-jest": "^21.2.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-regenerator": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
@@ -31,7 +32,11 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-es2017": "^6.24.1",
-    "babel-runtime": "^6.26.0"
-  },
-  "main": "translate.min.js"
+    "babel-runtime": "^6.26.0",
+    "dotenv": "^4.0.0",
+    "fetch-mock": "^5.13.1",
+    "memory-cache": "^0.2.0",
+    "rollup": "^0.50.0",
+    "uglify-es": "^3.1.3"
+  }
 }

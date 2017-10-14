@@ -9,7 +9,8 @@ module.exports = {
   output: {
     filename: 'translate.min.js',
     library: 'translate',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
+    publicPath:''
   },
   // devtool: 'sourcemap',
   module: {

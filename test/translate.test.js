@@ -1,17 +1,22 @@
-const translate = require('../translate.min.js');
-const fs = require('fs');
-const env = fs.readFileSync('./.env', 'utf-8').split('\n').forEach(one => {
-  const [key, ...value] = one.split('=');
-  process.env[key] = value.join('=');
-});
+import translate from '../src';
+import mock from './mock';
+import fs from 'fs';
 
-translate.engines.google.fetch = ({ from, to, text }) => [
-  `${process.env.GOOGLE_URL}&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`
-];
+// Quickly load .env files into the environment
+require('dotenv').load();
+
+translate.keys.google = process.env.GOOGLE_KEY;
 translate.keys.yandex = process.env.YANDEX_KEY;
 
-
 describe('Main', () => {
+  beforeEach(() => {
+    mock(/googleapis.*target=es/, [[['Hola mundo']]]);
+    mock(/googleapis.*target=ja/, [[['こんにちは世界']]]);
+  });
+
+  afterEach(() => mock.end());
+
+
   it('loads', () => {
     expect(translate).toBeDefined();
   });
@@ -93,6 +98,14 @@ describe('language parsing', () => {
 
 
 describe('cache', () => {
+  beforeEach(() => {
+    mock(/googleapis.*target=es/, [[['Hola mundo']]]);
+    mock(/googleapis.*target=ja/, [[['こんにちは世界']]]);
+  });
+
+  afterEach(() => mock.end());
+
+
   const stop = time => new Promise((resolve, reject) => {
     setTimeout(resolve, time);
   });
@@ -133,42 +146,53 @@ describe('File size', () => {
 });
 
 
+describe.skip('Google', () => {
+  it('works', async () => {
+    throw new Error('TODO');
+  });
+});
 
-describe('Engines', () => {
-  it('Yandex', async () => {
+
+describe('Yandex', () => {
+  beforeEach(() => {
+    mock(/yandex.*error/, { code: 500, message: 'it fails' });
+    mock(/yandex.*throw/, { code: 500, message: 'also fails harder' }, true);
+    mock(/yandex.*&lang=[a-z]*\-es/, { code: 200, text: ['Hola de Yandex'] });
+  });
+
+  afterEach(() => mock.end());
+
+  it('works with a simple request', async () => {
     const spanish = await translate('Hello from Yandex', { to: 'es', engine: 'yandex' });
     expect(spanish).toMatch(/Hola de Yandex/i);
+  });
+
+  it('can handle errors from the API', async () => {
+    const prom = translate('error', { to: 'es', engine: 'yandex' });
+    await expect(prom).rejects.toHaveProperty('message', 'it fails');
+  });
+
+  it('can handle errors thrown by fetch()', async () => {
+    const prom = translate('throw', { to: 'es', engine: 'yandex' });
+    await expect(prom).rejects.toHaveProperty('message', 'also fails harder');
   });
 });
 
 
 
-
-
-describe('Local translations', () => {
-  translate.add({
-    key1: {
-      en: 'AAA',
-      es: 'BBB',
-      ja: 'あああ'
-    }
+describe('Independent', () => {
+  it('has independent instances', () => {
+    const translate2 = new translate.Translate();
+    translate.keys.madeup = 'a';
+    translate2.keys.madeup = 'b';
+    expect(translate.keys.madeup).toBe('a');
+    expect(translate2.keys.madeup).toBe('b');
   });
 
-  it('Works with an object and keys', async () => {
-    expect(await translate('key1', 'en')).toBe('AAA');
-    expect(await translate('key1', 'es')).toBe('BBB');
-    expect(await translate('key1', 'ja')).toBe('あああ');
-  });
-
-  translate.add([{
-    en: 'A Local cache',
-    es: 'B Cache local'
-  }]);
-
-  it('works with an array and cross-lang', async () => {
-    expect(await translate('A Local cache', 'es')).toBe('B Cache local');
-    expect(await translate('A Local cache', 'en')).toBe('A Local cache');
-    expect(await translate('B Cache local', { from: 'es', to: 'es' })).toBe('B Cache local');
-    expect(await translate('B Cache local', { from: 'es', to: 'en' })).toBe('A Local cache');
+  it('is auto initialized', () => {
+    let inst = translate.Translate();
+    expect(inst.from).toBe('en');
+    inst = new translate.Translate();
+    expect(inst.from).toBe('en');
   });
 });

@@ -1,4 +1,4 @@
-{
+export default {
   "﻿aar": "aa", "abk": "ab", "afr": "af", "aka": "ak", "alb": "sq", "amh": "am",
   "ara": "ar", "arg": "an", "arm": "hy", "asm": "as", "ava": "av", "ave": "ae",
   "aym": "ay", "aze": "az", "bak": "ba", "bam": "bm", "baq": "eu", "bel": "be",

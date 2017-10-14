@@ -1,4 +1,4 @@
-{
+export default {
   "afar": "aa",
   "abkhazian": "ab",
   "afrikaans": "af",

@@ -10,6 +10,9 @@ const google = {
     { method: 'POST' }
   ],
   parse: res => res.json().then(body => {
+    if (body.error) {
+      throw new Error(body.error.errors[0].message);
+    }
     while (Array.isArray(body) && body.length) {
       body = body[0];
     }
@@ -21,11 +24,13 @@ const google = {
 const yandex = {
   needkey: true,
   fetch: ({ from, to, key, text }) => [
-    `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${key}&lang=${from ? `${from}-${to}` : to}&text=${encodeURIComponent(text)}`,
+    `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${key}&lang=${from}-${to}&text=${encodeURIComponent(text)}`,
     { method: 'POST', body: '' }
   ],
   parse: res => res.json().then(body => {
-    if (body.code !== 200) throw new Error(body.message);
+    if (body.code !== 200) {
+      throw new Error(body.message);
+    }
     return body.text[0];
   })
 };
