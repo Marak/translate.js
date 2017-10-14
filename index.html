@@ -1,3 +1,4 @@
+<!-- Small manual front-end test to see it all works -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,15 +9,20 @@
 </head>
 <body>
 
-  <p class="greeting"></p>
+  <p class="greeting">
+    Input the key manually in the console like this:
+
+    <code>translate.key = \'KEYHERE\';</code>
+
+    Then call test() from the console.
+  </p>
 
   <script src="translate.js"></script>
   <script>
-    (async () => {
+    const test = async () => {
       const res = await translate('Hello world', { from: 'en', to: 'es' });
-      // const res = await translate('Hello world', { from: 'en', to: 'es', engine: 'yandex' });
       document.querySelector('.greeting').innerText = `Hello world => ${res}`;
-    })();
+    };
   </script>
 </body>
 </html>

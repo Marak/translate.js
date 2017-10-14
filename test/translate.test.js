@@ -5,8 +5,8 @@ import fs from 'fs';
 // Quickly load .env files into the environment
 require('dotenv').load();
 
-translate.keys.google = process.env.GOOGLE_KEY;
-translate.keys.yandex = process.env.YANDEX_KEY;
+translate.keys.google = process.env.GOOGLE_KEY || 'fakekey';
+translate.keys.yandex = process.env.YANDEX_KEY || 'fakekey';
 
 describe('Main', () => {
   beforeEach(() => {
@@ -146,9 +146,27 @@ describe('File size', () => {
 });
 
 
-describe.skip('Google', () => {
-  it('works', async () => {
+describe('Google', () => {
+  beforeEach(() => {
+    mock(/googleapi.*error/, { error: { errors: [{ message: 'Google API Error' }] } });
+    mock(/googleapi.*throw/, { code: 500, message: 'also fails harder' }, true);
+    mock(/googleapi.*&lang=[a-z]*\-es/, { code: 200, text: ['Hola de Yandex'] });
+  });
+
+  afterEach(() => mock.end());
+
+  it.skip('works', async () => {
     throw new Error('TODO');
+  });
+
+  it('can handle errors from the API', async () => {
+    const prom = translate('error', { to: 'es', engine: 'google' });
+    await expect(prom).rejects.toHaveProperty('message', 'Google API Error');
+  });
+
+  it('can handle errors thrown by fetch()', async () => {
+    const prom = translate('throw', { to: 'es', engine: 'google' });
+    await expect(prom).rejects.toHaveProperty('message', 'also fails harder');
   });
 });
 

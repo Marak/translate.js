@@ -339,9 +339,8 @@ var language = name => {
 
 
 const google = {
-  url: '',
   needkey: true,
-  fetch: ({ from, to, key, text }) => [
+  fetch: ({ key, from, to, text }) => [
     `https://translation.googleapis.com/language/translate/v2?key=${key}&source=${from}&target=${to}&q=${encodeURIComponent(text)}`,
     { method: 'POST' }
   ],
@@ -359,7 +358,7 @@ const google = {
 
 const yandex = {
   needkey: true,
-  fetch: ({ from, to, key, text }) => [
+  fetch: ({ key, from, to, text }) => [
     `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${key}&lang=${from}-${to}&text=${encodeURIComponent(text)}`,
     { method: 'POST', body: '' }
   ],
@@ -374,6 +373,7 @@ const yandex = {
 
 var engines = { google, yandex };
 
+// From https://www.npmjs.com/package/memory-cache (Rollup didn't want to bundle it otherwise)
 'use strict';
 
 function Cache () {
@@ -623,9 +623,9 @@ const Translate = function (options = {}) {
       global.fetch = require('node-fetch');
     }
 
-    // if (engine.needkey && !opts.key) {
-    //   throw new Error(`The engine "${opts.engine}" needs a key, please provide it`);
-    // }
+    if (engine.needkey && !opts.key) {
+      throw new Error(`The engine "${opts.engine}" needs a key, please provide it`);
+    }
 
     const fetchOpts = engine.fetch(opts);
     return fetch(...fetchOpts)

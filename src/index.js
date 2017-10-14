@@ -63,9 +63,9 @@ const Translate = function (options = {}) {
       global.fetch = require('node-fetch');
     }
 
-    // if (engine.needkey && !opts.key) {
-    //   throw new Error(`The engine "${opts.engine}" needs a key, please provide it`);
-    // }
+    if (engine.needkey && !opts.key) {
+      throw new Error(`The engine "${opts.engine}" needs a key, please provide it`);
+    }
 
     const fetchOpts = engine.fetch(opts);
     return fetch(...fetchOpts)

@@ -3,9 +3,8 @@
 
 
 const google = {
-  url: '',
   needkey: true,
-  fetch: ({ from, to, key, text }) => [
+  fetch: ({ key, from, to, text }) => [
     `https://translation.googleapis.com/language/translate/v2?key=${key}&source=${from}&target=${to}&q=${encodeURIComponent(text)}`,
     { method: 'POST' }
   ],
@@ -23,7 +22,7 @@ const google = {
 
 const yandex = {
   needkey: true,
-  fetch: ({ from, to, key, text }) => [
+  fetch: ({ key, from, to, text }) => [
     `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${key}&lang=${from}-${to}&text=${encodeURIComponent(text)}`,
     { method: 'POST', body: '' }
   ],

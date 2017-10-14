@@ -9,12 +9,11 @@
     "url": "http://github.com/Marak/translate.js.git"
   },
   "scripts": {
-    "start": "npm run browser | npm run watch",
-    "browser": "http-server",
+    "start": "npm run watch # Start ~= Start dev",
     "build": "rollup src/index.js -o translate.js --name translate --output.format umd && uglifyjs translate.js -o translate.min.js",
     "test": "jest --coverage --collectCoverageFrom=src/**/*.js --forceExit",
-    "watch": "nodemon --exec \"npm run build && npm test\" --watch src --watch test --watch webpack.config.js --watch package.json",
-    "gzip": "gzip -c translate.min.js | wc -c # Only for Unix"
+    "watch": "nodemon --exec \"npm run build && npm test && npm run gzip\" --watch src --watch test --watch webpack.config.js --watch package.json",
+    "gzip": "gzip -c translate.min.js | wc -c && echo 'bytes' # Only for Unix"
   },
   "engine": [
     "node >=4.0.0"
@@ -25,17 +24,12 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-jest": "^21.2.0",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-regenerator": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-es2017": "^6.24.1",
     "babel-runtime": "^6.26.0",
     "dotenv": "^4.0.0",
     "fetch-mock": "^5.13.1",
-    "memory-cache": "^0.2.0",
     "rollup": "^0.50.0",
     "uglify-es": "^3.1.3"
   }
