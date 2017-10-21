@@ -348,10 +348,11 @@ const google = {
     if (body.error) {
       throw new Error(body.error.errors[0].message);
     }
-    while (Array.isArray(body) && body.length) {
-      body = body[0];
+    body = body.data.translations[0];
+    if (!body) {
+      throw new Error('Translation not found');
     }
-    return body;
+    return body.translatedText;
   })
 };
 

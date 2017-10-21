@@ -10,8 +10,8 @@ translate.keys.yandex = process.env.YANDEX_KEY || 'fakekey';
 
 describe('Main', () => {
   beforeEach(() => {
-    mock(/googleapis.*target=es/, [[['Hola mundo']]]);
-    mock(/googleapis.*target=ja/, [[['こんにちは世界']]]);
+    mock(/googleapis.*target=es/, { data: { translations: [{ translatedText: 'Hola mundo' }] } });
+    mock(/googleapis.*target=ja/, { data: { translations: [{ translatedText: 'こんにちは世界'}] } });
   });
 
   afterEach(() => mock.end());
@@ -99,8 +99,8 @@ describe('language parsing', () => {
 
 describe('cache', () => {
   beforeEach(() => {
-    mock(/googleapis.*target=es/, [[['Hola mundo']]]);
-    mock(/googleapis.*target=ja/, [[['こんにちは世界']]]);
+    mock(/googleapis.*target=es/, { data: { translations: [{ translatedText: 'Hola mundo' }] } });
+    mock(/googleapis.*target=ja/, { data: { translations: [{ translatedText: 'こんにちは世界'}] } });
   });
 
   afterEach(() => mock.end());
@@ -150,13 +150,14 @@ describe('Google', () => {
   beforeEach(() => {
     mock(/googleapi.*error/, { error: { errors: [{ message: 'Google API Error' }] } });
     mock(/googleapi.*throw/, { code: 500, message: 'also fails harder' }, true);
-    mock(/googleapi.*&lang=[a-z]*\-es/, { code: 200, text: ['Hola de Yandex'] });
+    mock(/googleapi.*&target=ru/, { data: { translations: [{ translatedText: 'Hola mundo' }] } });
   });
 
   afterEach(() => mock.end());
 
-  it.skip('works', async () => {
-    throw new Error('TODO');
+  it('works', async () => {
+    const text = await translate('Hello world', { to: 'ru', engine: 'google' });
+    expect(text).toBe('Hola mundo');
   });
 
   it('can handle errors from the API', async () => {
@@ -212,5 +213,16 @@ describe('Independent', () => {
     expect(inst.from).toBe('en');
     inst = new translate.Translate();
     expect(inst.from).toBe('en');
+  });
+});
+
+
+
+
+// These cost $ and would need your own keys. Disable otherwise
+describe('$$$ Real API tests', () => {
+  it('works', async () => {
+    const text = await translate('Hello world', { to: 'es', engine: 'google' });
+    expect(text).toMatch(/Hola Mundo/i);
   });
 });
