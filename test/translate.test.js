@@ -220,9 +220,9 @@ describe('Independent', () => {
 
 
 // These cost $ and would need your own keys. Disable otherwise
-describe('$$$ Real API tests', () => {
+describe.skip('$$$ Real API tests', () => {
   it('works', async () => {
-    const text = await translate('Hello world', { to: 'es', engine: 'google' });
+    const text = await translate('Hello world', { to: 'fr', engine: 'google' });
     expect(text).toMatch(/Hola Mundo/i);
   });
 });
