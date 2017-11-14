@@ -1,0 +1,29 @@
+<!-- Small manual front-end test to see it all works -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Translate example</title>
+</head>
+<body>
+
+  <p class="greeting">
+    Input the key manually in the console like this:
+
+    <code>translate.key = 'KEYHERE';</code>
+
+    Then call test() from the console.
+  </p>
+
+  <script src="translate.js"></script>
+  <script>
+    const test = async () => {
+      const text = await translate('Hello world', { from: 'en', to: 'es' });
+      document.querySelector('.greeting').innerText = `Hello world => ${text}`;
+      console.log('Done! Look at the website :)');
+    };
+  </script>
+</body>
+</html>

@@ -1,18 +1,33 @@
 {
-    "name": "translate",
-    "description": "translate text from one language to another on node.js and the browser. 30+ languages supported, simple as cake.",
-    "version": "0.7.0",
-    "author": "Marak Squires",
-    "repository": {
-        "type": "git",
-        "url": "http://github.com/Marak/translate.js.git" 
-    },
-    "engine": [
-        "node >=0.1.90" 
-    ],
-    "dependencies": {
-       "request": ">= 0.10.0",
-       "colors": ">= 0.3.0"
-    },
-    "main": "lib/translate" 
+  "name": "translate",
+  "description": "Translate text to different languages on node.js and the browser",
+  "main": "translate.min.js",
+  "version": "1.0.0",
+  "author": "Francisco Presencia",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/Marak/translate.js.git"
+  },
+  "scripts": {
+    "start": "npm run watch # Start ~= Start dev",
+    "build": "rollup src/index.js -o translate.js --name translate --output.format umd && uglifyjs translate.js -o translate.min.js",
+    "test": "jest --coverage --collectCoverageFrom=src/**/*.js --forceExit",
+    "watch": "nodemon --exec \"npm run build && npm test && npm run gzip\" --watch src --watch test --watch webpack.config.js --watch package.json",
+    "gzip": "gzip -c translate.min.js | wc -c && echo 'bytes' # Only for Unix"
+  },
+  "engine": [
+    "node >=4.0.0"
+  ],
+  "dependencies": {
+    "node-fetch": "^1.7.3"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-jest": "^21.2.0",
+    "babel-preset-env": "^1.6.1",
+    "dotenv": "^4.0.0",
+    "fetch-mock": "^5.13.1",
+    "rollup": "^0.50.0",
+    "uglify-es": "^3.1.3"
+  }
 }
