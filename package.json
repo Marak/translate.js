@@ -2,7 +2,7 @@
   "name": "translate",
   "description": "Translate text to different languages on node.js and the browser",
   "main": "translate.min.js",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0",
   "author": "Francisco Presencia",
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-jest": "^21.2.0",
+    "babel-preset-env": "^1.6.1",
     "dotenv": "^4.0.0",
     "fetch-mock": "^5.13.1",
     "rollup": "^0.50.0",
