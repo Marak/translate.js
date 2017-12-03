@@ -1,6 +1,6 @@
 # Translate
 
-Convert text to different languages on node.js and the browser. Flexible package and powerful back-end using Google (default), Bing or Yandex:
+Convert text to different languages on node.js and the browser. Flexible package and powerful back-end using Google (default), Yandex or Bing(not yet):
 
 ```js
 // 'es' can be a language string or an object like { to: 'es' }
@@ -126,72 +126,6 @@ To pass it per-translation, you can add it to your arguments:
 
 ```js
 translate('Hello world', { to: 'en', engine: 'google', key: 'YOUR-KEY-HERE' });
-```
-
-
-
-## Local translations
-
-You can also specify manual translations with optional online translation as a fallback. For this, specify them with an object with this structure:
-
-```js
-// Load it manually:
-translate.add({
-  hello: {
-    en: 'Hello world',
-    es: 'Hola mundo'
-  },
-  bye: {
-    en: 'Bye world',
-    es: 'Adiós mundo'
-  }
-  // ....
-});
-
-// Then use then
-const spanish = await translate('hello', 'es');
-expect(spanish).toBe('Hola mundo');
-```
-
-If you have the translations stored into a JSON you can load those. Example with Node.js:
-
-```js
-// First load the file. A .json can be loaded just like this:
-const translations = require('./translations.json');
-
-// Load it into translate.js
-translate.add(translations);
-
-// Use it
-const spanish = await translate('hello', 'es');
-expect(spanish).toBe('Hola mundo');
-```
-
-You can also load translations as an array. For large translations with many languages this is memory inefficient (O(n*l^2), where n = number of texts and l = number of translations per string):
-
-```js
-translate.add([{
-  en: 'Hello world',
-  es: 'Hola mundo'
-}, {
-  en: 'Bye world',
-  es: 'Adiós mundo'
-}]);
-
-// Remember the 'from' defaults to 'en'
-const spanish = await translate('Hello world', 'es');
-expect(spanish).toBe('Hola mundo');
-
-// But it is also more flexible as it can match any language as the source:
-const english = await translate('Hola mundo', { from: 'es', to: 'en' });
-expect(english).toBe('Hello world');
-```
-
-If you want to make sure that you are only using offline translations with no fallback, set the `engine` to `local`:
-
-```js
-translate.add(translations);
-translate.engine = 'local';
 ```
 
 
