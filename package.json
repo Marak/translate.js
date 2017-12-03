@@ -2,7 +2,7 @@
   "name": "translate",
   "description": "Translate text to different languages on node.js and the browser",
   "main": "translate.min.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Francisco Presencia",
   "repository": {
     "type": "git",
